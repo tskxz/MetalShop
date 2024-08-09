@@ -10,7 +10,7 @@ const produtos = [
         cor: 'Preto',
         tamanho: 'S',
         preco: 15.99,
-        emStock: 10,
+        emStock: 0,
         rating: 4.5,
         numReviews: 12,
     },

@@ -9,5 +9,8 @@
   "author": "Tanjil Khan",
   "license": "ISC",
   "description": "",
-  "type":"module"
+  "type": "module",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }

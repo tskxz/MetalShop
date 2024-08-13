@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { timestamp } from 'rxjs';
 
 const reviewSchema = mongoose.Schema({
     utilizador: {
@@ -19,7 +18,7 @@ const reviewSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-}, {timestamp: true})
+}, {timestamps: true})
 
 const produtoSchema = new mongoose.Schema({
 

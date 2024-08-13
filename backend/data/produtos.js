@@ -1,6 +1,6 @@
 const produtos = [
     {
-        _id: '1',
+
         nome: 'T-SHIRT Cannibal Corpse',
         imagem: '/images/cannibal_corpse.JPG',
         descricao: 'T-shirt para homem dos Cannibal Corpse - (Destroyed Without A Trace) - Preto - KINGS ROAD',
@@ -16,7 +16,6 @@ const produtos = [
     },
 
     {
-        _id: '2',
         nome: 'T-SHIRT Abbath',
         imagem: '/images/abbath.JPG',
         descricao: 'T-shirt para homem dos Abbath - Black On Black - Season of Mist',

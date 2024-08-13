@@ -7,5 +7,6 @@
   },
   "author": "Tanjil Khan",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "type":"module"
 }

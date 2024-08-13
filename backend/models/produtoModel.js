@@ -1,4 +1,25 @@
 import mongoose from 'mongoose';
+import { timestamp } from 'rxjs';
+
+const reviewSchema = mongoose.Schema({
+    utilizador: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Utilizador"
+    },
+    nome: {
+        type: String,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: true,
+    },
+    comentario: {
+        type: String,
+        required: true,
+    },
+}, {timestamp: true})
 
 const produtoSchema = new mongoose.Schema({
 

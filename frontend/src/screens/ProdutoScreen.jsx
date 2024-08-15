@@ -4,13 +4,14 @@ import {useGetProdutoQuery} from '../slices/produtosApiSlice'
 import Rating from '../components/Rating'
 import {Link} from 'react-router-dom';
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap';
+import Loader from '../components/Loader'
 
 const ProdutoScreen = () => {
   const {id: produtoId} = useParams()
   const {data: produto, isLoading, error}  = useGetProdutoQuery(produtoId);
     return(
     <>
-    {isLoading ? (<h2>Loading</h2>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
+    {isLoading ? (<Loader/>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
     <Link className='btn btn-light my-3' to='/'> Go Back </Link>
       <Row>
         <Col md={5}>

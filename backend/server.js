@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
 import connectDB from './config/db.js';
+import {notFound, errorHandler} from './middleware/errorMiddleware.js'
 
 import produtoRoutes from './routes/produtoRoutes.js'
 
@@ -16,5 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/produtos', produtoRoutes);
+app.use(notFound)
+app.use(errorHandler)
 
 app.listen(port, () => console.log(`Servidor a rodar na porta ${port}`))

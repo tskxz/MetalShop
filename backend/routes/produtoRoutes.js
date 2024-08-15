@@ -1,7 +1,7 @@
 import express from 'express'
 const router = express.Router();
 
-import produtos from './data/produtos.js';
+import produtos from '../data/produtos.js';
 
 router.get('/', (req, res) => {
     res.json(produtos)

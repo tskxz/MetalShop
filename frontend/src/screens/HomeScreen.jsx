@@ -2,12 +2,13 @@ import React from 'react'
 import {Row, Col} from 'react-bootstrap'
 import Produto from '../components/Produto.jsx'
 import { useGetProdutosQuery } from '../slices/produtosApiSlice.js'
+import Loader from '../components/Loader.jsx'
 
 const HomeScreen = () => {
   const {data: produtos, isLoading, error} = useGetProdutosQuery();
   return (
     <>
-    {isLoading ? (<h2>Loading</h2>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
+    {isLoading ? (<Loader/>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
        <h1>Os Nossos Produtos</h1>
        <Row>
            { produtos.map( (produto) => (

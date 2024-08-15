@@ -5,14 +5,16 @@ import Rating from '../components/Rating'
 import {Link} from 'react-router-dom';
 import {Row, Col, Image, ListGroup, Card, Button} from 'react-bootstrap';
 import Loader from '../components/Loader'
+import Message from '../components/Message'
 
 const ProdutoScreen = () => {
   const {id: produtoId} = useParams()
   const {data: produto, isLoading, error}  = useGetProdutoQuery(produtoId);
     return(
     <>
-    {isLoading ? (<Loader/>) : error ? (<div>{error?.data?.message || error.error}</div>) : (<>
+    {isLoading ? (<Loader/>) : error ? (<Message variant='danger'>{error?.data?.message || error.error}</Message>) : (<>
     <Link className='btn btn-light my-3' to='/'> Go Back </Link>
+    <Message variant='danger'>hello</Message>
       <Row>
         <Col md={5}>
           <Image src={produto.imagem} alt={produto.nome} fluid />

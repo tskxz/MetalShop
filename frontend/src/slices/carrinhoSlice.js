@@ -16,20 +16,20 @@ const carrinhoSlice = createSlice({
             if(existItem){
                 state.carrinhoItens = state.carrinhoItens.map((x) => x._id === existItem._id ? item : x);
             } else {
-                state.carrinhoItens = [...state.cartItens, item]
+                state.carrinhoItens = [...state.carrinhoItens, item]
             }
 
             // Calcular o preco dos itens
-            state.precoItens = addDecimals(state.carrinhoItens.reduce((acc, item) => acc + item.preco * item.quantidade));
+            state.precoItens = addDecimals(state.carrinhoItens.reduce((acc, item) => acc + item.preco * item.quantidade, 0));
             
             // Calcular o preco do envio (se a encomenda for mais de 100 euros, é de graça, se não, 10 euros preco de envio)
             state.precoEnvio = addDecimals(state.precoItens > 100 ? 0: 10)
 
             // Calcular o preco da taxa
-            state.precoTaxa = addDecimals(Number((0.15 * state.precoItens)))
+            state.precoTaxa = addDecimals(Number((0.15 * state.precoItens).toFixed(2)))
 
             // Calcular preco total
-            state.precoTotal = Number(state.precoItens) + Number(state.preocEnvio) + Number(state.precoTaxa) + Number(state.precoTotal).toFixed(2)
+            state.precoTotal = (Number(state.precoItens) + Number(state.precoEnvio) + Number(state.precoTaxa)).toFixed(2)
 
             localStorage.setItem('carrinho', JSON.stringify(state))
         }

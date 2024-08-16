@@ -1,6 +1,7 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Utilizador from '../models/utilizadorModel.js'
-import jwt from 'jsonwebtoken'
+import generateToken from '../utils/generateToken.js'
+
 
 // @desc    Autenticar utilizador e ter token
 // @route   GET /api/utilizadores/login
@@ -9,17 +10,7 @@ const authUtilizador = asyncHandler(async(req, res) => {
 	const {email, password} = req.body;
 	const utilizador = await Utilizador.findOne({email});
 	if(utilizador && (await utilizador.matchPassword(password))){
-		const token = jwt.sign({utilizadorId: utilizador._id}, process.env.JWT_SECRET, {
-			expiresIn: '30d',
-		})
-
-		// Meter jwt como http-only cookie
-		res.cookie('jwt', token, {
-			httpOnly: true,
-			secure: process.env.NODE_ENV !== 'development',
-			sameSite: 'strict',
-			maxAge: 30*24*60*60*1000 // 30 dias
-		})
+		generateToken(res, utilizador._id)
 		res.json({
 			_id: utilizador._id,
 			nome: utilizador.nome,
@@ -27,7 +18,7 @@ const authUtilizador = asyncHandler(async(req, res) => {
 			isAdmin: utilizador.isAdmin
 		})
 	} else {
-		res.status(404)
+		res.status(400)
 		throw new Error('Email ou pass errada')
 	}
 	res.send('auth utilizador')
@@ -37,14 +28,38 @@ const authUtilizador = asyncHandler(async(req, res) => {
 // @route   POST /api/utilizadores
 // @access  Public
 const registarUtilizador = asyncHandler(async(req, res) => {
-	res.send('registar utilizador')
+	const {nome, email, password} = req.body;
+	const utilizadorExiste = await Utilizador.findOne({email})
+	if(utilizadorExiste){
+		res.status(400);
+		throw new Error('utilizador existe')
+	}
+	const utilizador = await Utilizador.create({
+		nome,email,password
+	})
+	if(utilizador){
+		generateToken(res, utilizador._id)
+		res.status(201).json({
+			_id: utilizador._id,
+			nome: utilizador.nome,
+			email: utilizador.email,
+			isAdmin: utilizador.isAdmin
+		})
+	} else {
+		res.status(400);
+		throw new Error('invalid user data')
+	}
 })
 
 // @desc    Desautenticar utilizador / Limpar Cookie
 // @route   POST /api/utilizadores/logout
 // @access  Private
 const logoutUtilizador = asyncHandler(async(req, res) => {
-	res.send('logout utilizador')
+	res.cookie('jwt', '', {
+		httpOnly: true,
+		expires: new Date(0)
+	})
+	res.status(200).json({message: 'Logged out successfully'})
 })
 
 // @desc    Perfil do utilizador

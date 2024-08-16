@@ -10,8 +10,22 @@ const CarrinhoScreen = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
+	const carrinho = useSelector((state) => state.carrinho);
+	const {carrinhoItens} = carrinho;
+
 	return (
-		<div>CarrinhoScreen</div>
+		<Row>
+			<Col md={8}>
+				<h1 style={{marginBottom: '20px'}}>Carrinho de compras</h1>
+				{carrinhoItens.length === 0 ? (
+					<Message>O teu carrinho está vazio <Link to='/'>Voltar atras</Link></Message>
+				) : (
+					<ListGroup variant='flush'>
+						Itens
+					</ListGroup>
+				)}
+			</Col>
+		</Row>
 	)
 }
 

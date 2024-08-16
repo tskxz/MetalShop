@@ -5,6 +5,7 @@ import {Row, Col, ListGroup, Image, Form, Button, Card} from 'react-bootstrap'
 import {FaTrash} from 'react-icons/fa'
 import Message from '../components/Message'
 import {adicionarToCarrinho} from '../slices/carrinhoSlice.js'
+import {removerFromCarrinho} from '../slices/carrinhoSlice.js'
 
 const CarrinhoScreen = () => {
 
@@ -16,6 +17,14 @@ const CarrinhoScreen = () => {
 
 	const adicionarToCarrinhoHandler = async (produto, quantidade) => {
 		dispatch(adicionarToCarrinho({...produto, quantidade}))
+	}
+
+	const removerFromCarrinhoHandler = async (id) => {
+		dispatch(removerFromCarrinho(id))
+	}
+
+	const checkoutHandler = () => {
+		navigate('/login?redirect=/compra')
 	}
 
 	return (
@@ -47,7 +56,7 @@ const CarrinhoScreen = () => {
 									</Col>
 
 									<Col md={2}>
-										<Button type='button' variant='light'><FaTrash/></Button>
+										<Button type='button' variant='light' onClick={() => removerFromCarrinhoHandler(item._id)}><FaTrash/></Button>
 									</Col>
 								</Row>
 							</ListGroup.Item>
@@ -64,8 +73,8 @@ const CarrinhoScreen = () => {
 							${carrinhoItens.reduce((acc, item) => acc+item.quantidade * item.preco, 0).toFixed(2)}
 						</ListGroup.Item>
 						<ListGroup.Item>
-							<Button type='button' className='btn-block' disabled={carrinhoItens.length === 0}>
-								Proceder a compra
+							<Button type='button' className='btn-block' disabled={carrinhoItens.length === 0} onClick={checkoutHandler}>
+								Proceder o checkout
 							</Button>
 						</ListGroup.Item>
 					</ListGroup>

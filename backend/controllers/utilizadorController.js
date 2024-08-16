@@ -1,5 +1,6 @@
 import asyncHandler from '../middleware/asyncHandler.js';
 import Utilizador from '../models/utilizadorModel.js'
+import jwt from 'jsonwebtoken'
 
 // @desc    Autenticar utilizador e ter token
 // @route   GET /api/utilizadores/login
@@ -8,6 +9,17 @@ const authUtilizador = asyncHandler(async(req, res) => {
 	const {email, password} = req.body;
 	const utilizador = await Utilizador.findOne({email});
 	if(utilizador && (await utilizador.matchPassword(password))){
+		const token = jwt.sign({utilizadorId: utilizador._id}, process.env.JWT_SECRET, {
+			expiresIn: '30d',
+		})
+
+		// Meter jwt como http-only cookie
+		res.cookie('jwt', token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV !== 'development',
+			sameSite: 'strict',
+			maxAge: 30*24*60*60*1000 // 30 dias
+		})
 		res.json({
 			_id: utilizador._id,
 			nome: utilizador.nome,

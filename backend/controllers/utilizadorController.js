@@ -5,6 +5,19 @@ import Utilizador from '../models/utilizadorModel.js'
 // @route   GET /api/utilizadores/login
 // @access  Public
 const authUtilizador = asyncHandler(async(req, res) => {
+	const {email, password} = req.body;
+	const utilizador = await Utilizador.findOne({email});
+	if(utilizador && (await utilizador.matchPassword(password))){
+		res.json({
+			_id: utilizador._id,
+			nome: utilizador.nome,
+			email: utilizador.email,
+			isAdmin: utilizador.isAdmin
+		})
+	} else {
+		res.status(404)
+		throw new Error('Email ou pass errada')
+	}
 	res.send('auth utilizador')
 })
 

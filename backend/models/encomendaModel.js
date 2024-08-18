@@ -24,9 +24,9 @@ const encomendaSchema = mongoose.Schema({
     ],
 
     enderecoPostal: {
-        morada: { type: String, required: true},
+        endereco: { type: String, required: true},
         cidade: {type: String, required: true},
-        codigo_postal: {type: String, required: true},
+        codigoPostal: {type: String, required: true},
         pais: {type: String, required: true},
     },
 
@@ -41,22 +41,22 @@ const encomendaSchema = mongoose.Schema({
         update_time: {type: String},
         email_address: {type: String},
     },
-    itensPreco: {
+    precoItens: {
         type: Number,
         required: true,
         default: 0.0,
     },
-    taxaPreco: {
+    precoTaxa: {
         type: Number,
         required: true,
         default: 0.0,
     },
-    envioPreco: {
+    precoEnvio: {
         type: Number,
         required: true,
         default: 0.0
     },
-    totalPreco: {
+    precoTotal: {
         type: Number,
         required: true,
         default: 0.0,

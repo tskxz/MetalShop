@@ -1,12 +1,12 @@
 import asyncHandler from '../middleware/asyncHandler.js';
-import Encomenda from '../models/produtoModel.js'
+import Encomenda from '../models/encomendaModel.js'
 
 
 // @desc    Criar nova encomenda
 // @route   POST /api/encomendas
 // @access  Private
 const addEncomendaItens = asyncHandler(async(req, res) => {
-    const {encomendaItens, enderecoPostal, metodoPagamento, ItensPreco, taxaPreco, envioPreco, totalPreco} = req.body
+    const {encomendaItens, enderecoPostal, metodoPagamento, precoItens, precoTaxa, precoEnvio, precoTotal} = req.body
     if(encomendaItens && encomendaItens.length===0){
         res.status(400)
         throw new Error('nenhum item na encomenda')
@@ -20,12 +20,13 @@ const addEncomendaItens = asyncHandler(async(req, res) => {
             utilizador: req.utilizador._id,
             enderecoPostal,
             metodoPagamento,
-            ItensPreco,
-            taxaPreco,
-            envioPreco,
-            totalPreco
+            precoItens,
+            precoTaxa,
+            precoEnvio,
+            precoTotal
         })
         const criarEncomenda = await encomenda.save()
+        console.log('criado')
         res.status(201).json(criarEncomenda)
     }
 })

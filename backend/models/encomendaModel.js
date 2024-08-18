@@ -1,3 +1,5 @@
+// erro de escrita, entrege... é entregue, irei mudar isso dps
+
 import mongoose from 'mongoose';
 
 const encomendaSchema = mongoose.Schema({

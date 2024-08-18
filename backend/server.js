@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser'
 
 import produtoRoutes from './routes/produtoRoutes.js'
 import utilizadorRoutes from './routes/utilizadorRoutes.js'
-
+import encomendaRoutes from './routes/encomendaRoutes.js'
 const port = process.env.PORT || 5000;
 
 connectDB(); // Conexão da base de dados
@@ -27,6 +27,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/produtos', produtoRoutes);
 app.use('/api/utilizadores', utilizadorRoutes)
+app.use('/api/encomendas', encomendaRoutes);
+
 app.use(notFound)
 app.use(errorHandler)
 

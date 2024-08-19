@@ -2,12 +2,40 @@ import {Link, useParams} from 'react-router-dom'
 import {Row, Col, ListGroup, Image, Form, Button, Card} from 'react-bootstrap'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import {useGetEncomendaDetailsQuery} from '../slices/encomendasApiSlice';
+import {PayPalButtons, usePayPalScriptReducer} from '@paypal/react-paypal-js'
+import {useGetEncomendaDetailsQuery, usePagarEncomendaMutation, useGetPayPalClientIdQuery} from '../slices/encomendasApiSlice';
+import {toast} from 'react-toastify'
+import {useSelector} from 'react-redux'
+import {useEffect} from 'react'
 
 const EncomendaScreen = () => {
 	const {id: encomendaId} = useParams();
 	const {data: encomenda, refetch, isLoading, error} = useGetEncomendaDetailsQuery(encomendaId)
-	console.log(encomenda)
+	const [pagarEncomenda, {isLoading:loadingPay}] = usePagarEncomendaMutation()
+	const [{isPending}, paypalDispatch] = usePayPalScriptReducer()
+	const {data:paypal, isLoading:loadingPayPal, error: errorPayPal} = useGetPayPalClientIdQuery()
+	const {utilizadorInfo} = useSelector((state) => state.auth)
+
+	useEffect(() => {
+		if(!errorPayPal && !loadingPayPal && paypal.clientId){
+			const loadPayPalScript = async() => {
+				paypalDispatch({
+					type: 'resetOptions',
+					value: {
+						'client-id': paypal.clientId,
+						 currency: 'EUR',
+					}
+				});
+				paypalDispatch({type: 'setLoadingStatus', value: 'pending'})
+			}
+			if(encomenda && !encomenda.isPago){
+				if(!window.paypal){
+					loadPayPalScript()
+				}
+			}
+		}
+	}, [encomenda, paypal, paypalDispatch, loadingPayPal, errorPayPal])
+
 	return isLoading ? <Loader/> : error ? <Message variant='danger'/> : (
 		<>
 			<h1>Encomenda {encomendaId}</h1>

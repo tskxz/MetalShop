@@ -26,6 +26,7 @@ import PrivateRoute from './components/PrivateRoute';
 import PagamentoScreen from './screens/PagamentoScreen';
 import EncomendarScreen from './screens/EncomendarScreen';
 import EncomendaScreen from './screens/EncomendaScreen';
+import PerfilScreen from './screens/PerfilScreen';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,6 +42,7 @@ const router = createBrowserRouter(
         <Route path="/pagamento" element={<PagamentoScreen/>} /> 
         <Route path="/encomendar" element={<EncomendarScreen/>} /> 
         <Route path="/encomenda/:id" element={<EncomendaScreen/>} /> 
+        <Route path="/perfil" element={<PerfilScreen/>} /> 
       </Route>
     </Route>
   )

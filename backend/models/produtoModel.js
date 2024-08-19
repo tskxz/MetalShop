@@ -48,11 +48,6 @@ const produtoSchema = new mongoose.Schema({
         required: true,
     },
 
-    descricao: {
-        type: String,
-        required: true,
-    },
-
     genero: {
         type: String,
         required: true,

@@ -23,7 +23,7 @@ const Header = () => {
             console.log(err)
         }
     }
-    console.log(carrinhoItens)
+
   return (
     <header>
         <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>

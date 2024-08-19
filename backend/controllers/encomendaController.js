@@ -43,9 +43,9 @@ const getMinhasEncomendas = asyncHandler(async(req, res) => {
 // @route   GET /api/encomendas/:id
 // @access  Private/Admin
 const getEncomenda = asyncHandler(async(req, res) => {
-    const encomenda = await Encomenda.findById(req.params.id).populate('utilizador', 'name email')
+    const encomenda = await Encomenda.findById(req.params.id).populate('utilizador', 'nome email')
     if(encomenda){
-        res.status(200),json(encomenda)
+        res.status(200).json(encomenda)
     } else {
         res.status(404)
         throw new Error('encomenda n encontrado')

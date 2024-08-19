@@ -9,9 +9,16 @@ export const encomendasApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: {...encomenda}
 			})
+		}),
+
+		getEncomendaDetails: builder.query({
+			query: (encomendaId) => ({
+				url: `${ENCOMENDAS_URL}/${encomendaId}`,
+			}),
+			keepUnusedDataFor: 5
 		})
 	})
 })
 
 
-export const {useCriarEncomendaMutation} = encomendasApiSlice
+export const {useCriarEncomendaMutation, useGetEncomendaDetailsQuery} = encomendasApiSlice

@@ -22,7 +22,6 @@ const EncomendarScreen = () => {
 			navigate('/pagamento')
 		}
 	}, [carrinho.metodoPagamento, carrinho.enderecoPostal.endereco, navigate])
-	console.log(carrinho.carrinhoItens)
 	const encomendarHandler = async () => {
 		try {
 			const res = await criarEncomenda({

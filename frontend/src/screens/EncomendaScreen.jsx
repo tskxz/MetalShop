@@ -36,6 +36,42 @@ const EncomendaScreen = () => {
 		}
 	}, [encomenda, paypal, paypalDispatch, loadingPayPal, errorPayPal])
 
+	function onApprove(data, actions){
+		return actions.order.capture().then(async function(details){
+			try{
+				await pagarEncomenda({encomendaId, details})
+				refetch();
+				toast.success('ESTÁ PAGO.')
+			} catch(err){
+				toast.error(err?.data?.message || err.message)
+			}
+		})
+	}
+
+	async function onApproveTest(){
+		await pagarEncomenda({encomendaId, details: {payer:{}}})
+				refetch();
+				toast.success('ESTÁ PAGO.')
+	}
+
+	function onError(err){
+		toast.error(err.message)
+	}
+
+	function createOrder(data, actions){
+		return actions.order.create({
+			purchase_units: [
+				{
+					amount: {
+						value: encomenda.precoTotal
+					}
+				}
+			]
+		}).then((encomendaId) => {
+			return encomendaId
+		})
+	}
+
 	return isLoading ? <Loader/> : error ? <Message variant='danger'/> : (
 		<>
 			<h1>Encomenda {encomendaId}</h1>
@@ -133,6 +169,21 @@ const EncomendaScreen = () => {
 									<Col>${encomenda.precoTotal}</Col>
 								</Row>
 							</ListGroup.Item>
+
+							{!encomenda.isPago && (
+								<ListGroup.Item>
+									{loadingPay && <Loader/>}
+									{isPending? <Loader/> : (
+										<div>
+											<Button onClick={onApproveTest} style={{marginBottom: '10px'}}>Test Pay Order</Button>
+											<div>
+												<PayPalButtons createOrder={createOrder} onApprove={onApprove} onError={onError}></PayPalButtons>
+											</div>
+										</div>
+									)}
+								</ListGroup.Item>
+							)}
+
 						</ListGroup>
 					</Card>
 				</Col>

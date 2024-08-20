@@ -86,7 +86,8 @@ const atualizarEncomendaEntregue = asyncHandler(async(req, res) => {
 // @route   GET /api/encomendas/
 // @access  Private/admin
 const getEncomendas = asyncHandler(async(req, res) => {
-    res.send('ter encomendas')
+    const encomendas = await Encomenda.find({}).populate('utilizador', 'id nome');
+    res.status(200).json(encomendas)
 })
 
 export {addEncomendaItens, getMinhasEncomendas, getEncomenda, atualizarEncomendaPago, atualizarEncomendaEntregue, getEncomendas}

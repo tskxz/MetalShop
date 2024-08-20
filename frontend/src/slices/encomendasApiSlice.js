@@ -38,9 +38,16 @@ export const encomendasApiSlice = apiSlice.injectEndpoints({
 				url: `${ENCOMENDAS_URL}/minhasencomendas`
 			}),
 			keepUnusedDataFor: 5,
+		}),
+
+		getEncomendas: builder.query({
+			query: () => ({
+				url: ENCOMENDAS_URL,
+			}),
+			keepUnusedDataFor: 5,
 		})
 	})
 })
 
 
-export const {useCriarEncomendaMutation, useGetEncomendaDetailsQuery, usePagarEncomendaMutation, useGetPayPalClientIdQuery, useGetMinhasEncomendasQuery} = encomendasApiSlice
+export const {useCriarEncomendaMutation, useGetEncomendaDetailsQuery, usePagarEncomendaMutation, useGetPayPalClientIdQuery, useGetMinhasEncomendasQuery, useGetEncomendasQuery} = encomendasApiSlice

@@ -1,3 +1,5 @@
+// CORRIGIR PALAVRA MAL ESCRITO ENTREGE... É ENTREGUE
+
 import asyncHandler from '../middleware/asyncHandler.js';
 import Encomenda from '../models/encomendaModel.js'
 
@@ -79,7 +81,17 @@ const atualizarEncomendaPago = asyncHandler(async(req, res) => {
 // @route   PUT /api/encomendas/:id/entregue
 // @access  Private/Admin
 const atualizarEncomendaEntregue = asyncHandler(async(req, res) => {
-    res.send('atualizar encomenda para pago')
+    const encomenda = await Encomenda.findById(req.params.id)
+    if(encomenda){
+        encomenda.isEntrege = true
+        encomenda.entregeEm = Date.now();
+
+        const encomendaAtualizado = await encomenda.save()
+        res.status(200).json(encomendaAtualizado)
+    } else {
+        res.status(404)
+        throw new Error('encomenda n encontrado')
+    }
 })
 
 // @desc    Ter encomendas

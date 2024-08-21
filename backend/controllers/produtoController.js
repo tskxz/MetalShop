@@ -71,5 +71,21 @@ const atualizarProduto = asyncHandler(async(req, res) => {
     }
 })
 
+// @desc    Apagar produto
+// @route   DELETE /api/produtos/:id
+// @access  Private/Admin
+const deleteProduto = asyncHandler(async(req, res) => {
+   
+    const produto = await Produto.findById(req.params.id)
+    if(produto){
+       await Produto.deleteOne({_id: produto._id})
+       res.status(200).json({message: 'produto apagado'})
 
-export {getProdutos, getProduto, criarProduto, atualizarProduto}
+    } else {
+        res.status(404)
+        throw new Error('resource n encontrado')
+    }
+})
+
+
+export {getProdutos, getProduto, criarProduto, atualizarProduto, deleteProduto}

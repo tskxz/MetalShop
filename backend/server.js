@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -8,6 +9,9 @@ import cookieParser from 'cookie-parser'
 import produtoRoutes from './routes/produtoRoutes.js'
 import utilizadorRoutes from './routes/utilizadorRoutes.js'
 import encomendaRoutes from './routes/encomendaRoutes.js'
+
+import uploadRoutes from './routes/uploadRoutes.js'
+
 const port = process.env.PORT || 5000;
 
 connectDB(); // Conexão da base de dados
@@ -28,7 +32,12 @@ app.get('/', (req, res) => {
 app.use('/api/produtos', produtoRoutes);
 app.use('/api/utilizadores', utilizadorRoutes)
 app.use('/api/encomendas', encomendaRoutes);
+app.use('/api/upload', uploadRoutes)
+
 app.get('/api/config/paypal', (req, res) => res.send({clientId: process.env.PAYPAL_CLIENT_ID}))
+
+const __dirname = path.resolve() // set __dirname to current directory
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
 
 app.use(notFound)
 app.use(errorHandler)

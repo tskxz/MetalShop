@@ -55,7 +55,7 @@ const ListaProdutoScreen = () => {
 								<td>{produto.preco}</td>
 								<td>{produto.banda}</td>
 								<td>
-									<LinkContainer to={`/produto/${produto._id}/edit`}>
+									<LinkContainer to={`/admin/produto/${produto._id}/edit`}>
 											<Button className='btn-sm mx-2' variant='light'>
 												<FaEdit/>
 											</Button>

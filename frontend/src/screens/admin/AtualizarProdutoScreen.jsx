@@ -5,7 +5,7 @@ import Message from '../../components/Message'
 import Loader from '../../components/Loader'
 import FormContainer from '../../components/FormContainer'
 import {toast} from 'react-toastify'
-import {useAtualizarProdutoMutation, useGetProdutoQuery} from '../../slices/produtosApiSlice.js'
+import {useAtualizarProdutoMutation, useGetProdutoQuery, useUploadProdutoImagemMutation} from '../../slices/produtosApiSlice.js'
 
 const AtualizarProdutoScreen = () => {
 	const {id: produtoId} = useParams();
@@ -22,6 +22,7 @@ const AtualizarProdutoScreen = () => {
 
 	const {data: produto, isLoading, refetch, error} = useGetProdutoQuery(produtoId);
 	const [atualizarProduto, {isLoading: loadingUpdate}] = useAtualizarProdutoMutation()
+	const [uploadProdutoImagem, {isLoading: loadingUpload}] = useUploadProdutoImagemMutation()
 
 	const navigate = useNavigate()
 
@@ -62,6 +63,18 @@ const AtualizarProdutoScreen = () => {
 		} else {
 			toast.success('produto atualizado')
 			navigate('/admin/listaproduto')
+		}
+	}
+
+	const uploadFileHandler = async(e) => {
+		const formData = new FormData()
+		formData.append('image', e.target.files[0])
+		try {
+			const res = await uploadProdutoImagem(formData).unwrap()
+			toast.success(res.message)
+			setImagem(res.image)
+		} catch(err){
+			toast.error(err?.data?.message || err.error)
 		}
 	}
 	return <>
@@ -105,9 +118,10 @@ const AtualizarProdutoScreen = () => {
 						
 					</Form.Group>
 
-					<Form.Group controlId='image'>
+					<Form.Group controlId='imagem'>
 		              <Form.Label>Imagem</Form.Label>
-		              <Form.Control type='text' placeholder='Enter image url' value={imagem} onChange={(e) => setImagem(e.target.value)}></Form.Control>
+		              <Form.Control type='text' placeholder='Enter image url' value={imagem} onChange={(e) => setImagem}></Form.Control>
+		              <Form.Control type='file' label='escolher ficheiro' onChange={uploadFileHandler}></Form.Control>
 		             </Form.Group>
 
 					<Form.Group controlId='categoria'>

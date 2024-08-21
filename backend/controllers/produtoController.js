@@ -45,4 +45,31 @@ const criarProduto = asyncHandler(async(req, res) => {
     res.json(produtoCriado)
 })
 
-export {getProdutos, getProduto, criarProduto}
+// @desc    Atualizar produto
+// @route   PUT /api/produtos/:id
+// @access  Private/Admin
+const atualizarProduto = asyncHandler(async(req, res) => {
+    const {nome, preco, descricao, imagem, banda, categoria, genero, cor, tamanho, emStock} = req.body
+    const produto = await Produto.findById(req.params.id)
+    if(produto){
+        produto.nome = nome,
+        produto.preco = preco,
+        produto.descricao = descricao,
+        produto.imagem = imagem,
+        produto.banda = banda,
+        produto.categoria = categoria,
+        produto.genero = genero,
+        produto.cor = cor,
+        produto.tamanho = tamanho,
+        produto.emStock = emStock
+        
+        const produtoAtualizado = await produto.save()
+        res.json(produtoAtualizado)
+    } else {
+        res.status(404)
+        throw new Error('resource n encontrado')
+    }
+})
+
+
+export {getProdutos, getProduto, criarProduto, atualizarProduto}

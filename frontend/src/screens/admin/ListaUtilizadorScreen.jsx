@@ -3,16 +3,27 @@ import {Table, Button} from 'react-bootstrap'
 import {FaTimes, FaTrash, FaEdit, FaCheck} from 'react-icons/fa'
 import Message from '../../components/Message';
 import Loader from '../../components/Loader'
-import {useGetUtilizadoresQuery} from '../../slices/utilizadoresApiSlice.js'
+import {toast} from 'react-toastify'
+import {useGetUtilizadoresQuery, useDeleteUtilizadorMutation} from '../../slices/utilizadoresApiSlice.js'
 
 const ListaUtilizadorScreen = () => {
 	const {data: utilizadores, refetch, isLoading, error} = useGetUtilizadoresQuery()
-	const deleteHandler = (id) => {
-		console.log('del')
+	const [deleteUtilizador, {isLoading: loadingDelete}] = useDeleteUtilizadorMutation()
+	const deleteHandler = async (id) => {
+		if(window.confirm('Tens a certeza que queres apagar o utilizador?')){
+			try {
+				await deleteUtilizador(id)
+				toast.success('Utilizador apagado')
+				refetch()
+			} catch(err) {
+				toast.error(err?.data?.message || err.error)
+			}
+		}
 	}
 
 	return <>
 		<h1>Utilizadores</h1>
+		{loadingDelete && <Loader/>}
 		{isLoading ? <Loader/> : error ? <Message variant='danger'>{error}</Message> : (
 			<Table striped bordered hover responsive className='table-sm'>
 				<thead>

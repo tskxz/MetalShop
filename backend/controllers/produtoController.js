@@ -87,5 +87,40 @@ const deleteProduto = asyncHandler(async(req, res) => {
     }
 })
 
+// @desc    Criar uma review
+// @route   POST /api/produtos/:id/review
+// @access  Private
+const criarProdutoReview = asyncHandler(async(req, res) => {
+   const {rating, comentario} = req.body
+    const produto = await Produto.findById(req.params.id)
+    if(produto){
+       const alreadyReviewed = produto.reviews.find(
+            (review) => review.utilizador.toString() === req.utilizador._id.toString()
+        )
 
-export {getProdutos, getProduto, criarProduto, atualizarProduto, deleteProduto}
+       if(alreadyReviewed){
+        res.status(400)
+        throw new Error('product already reviewed')
+       }
+
+       const review = {
+        nome: req.utilizador.nome,
+        rating: Number(rating),
+        comentario,
+        utilizador: req.utilizador._id
+       }
+
+       produto.reviews.push(review)
+       produto.numReviews = produto.reviews.length;
+       produto.rating = produto.reviews.reduce((acc, review) => acc+review.rating, 0) / produto.reviews.length
+       await produto.save()
+       res.status(201).json({message: 'Review added'})
+
+    } else {
+        res.status(404)
+        throw new Error('resource n encontrado')
+    }
+})
+
+
+export {getProdutos, getProduto, criarProduto, atualizarProduto, deleteProduto, criarProdutoReview}

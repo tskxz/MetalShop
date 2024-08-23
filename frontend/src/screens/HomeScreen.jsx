@@ -4,15 +4,17 @@ import Produto from '../components/Produto.jsx'
 import { useGetProdutosQuery } from '../slices/produtosApiSlice.js'
 import Loader from '../components/Loader.jsx'
 import Message from '../components/Message.jsx'
+import {useParams} from 'react-router-dom'
 
 const HomeScreen = () => {
-  const {data: produtos, isLoading, error} = useGetProdutosQuery();
+    const {pageNumber} = useParams()
+  const {data, isLoading, error} = useGetProdutosQuery({pageNumber});
   return (
     <>
     {isLoading ? (<Loader/>) : error ? (<Message variant='danger'>{error?.data?.message || error.error}</Message>) : (<>
        <h1>Os Nossos Produtos</h1>
        <Row>
-           { produtos.map( (produto) => (
+           { data.produtos.map( (produto) => (
                <Col key={produto._id} sm={12} md={6} lg={4} xl={3}>
                    <Produto produto={produto} />
                </Col>

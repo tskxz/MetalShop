@@ -6,8 +6,12 @@ import Produto from '../models/produtoModel.js'
 // @route   GET /api/produtos
 // @access  Public
 const getProdutos = asyncHandler(async(req, res) => {
-    const produtos = await Produto.find({});
-    res.json(produtos)
+    const pageSize = 2;
+    const page = Number(req.query.pageNumber) || 1;
+    const count = await Produto.countDocuments()
+
+    const produtos = await Produto.find({}).limit(pageSize).skip(pageSize * (page-1));
+    res.json({produtos, page, pages: Math.ceil(count / pageSize)})
 })
 
 // @desc    Ter um produto específico

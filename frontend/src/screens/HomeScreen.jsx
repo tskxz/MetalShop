@@ -8,6 +8,7 @@ import {useParams} from 'react-router-dom'
 import Paginate from '../components/Paginate.jsx'
 import {Link} from 'react-router-dom'
 import ProdutoCarousel from '../components/ProdutoCarousel'
+import Meta from '../components/Meta'
 
 const HomeScreen = () => {
     const {pageNumber, keyword} = useParams()
@@ -16,6 +17,7 @@ const HomeScreen = () => {
     <>
     {!keyword ? <ProdutoCarousel/> : (<Link to='/' className='btn btn-light mb-4'> Go back </Link>)}
     {isLoading ? (<Loader/>) : error ? (<Message variant='danger'>{error?.data?.message || error.error}</Message>) : (<>
+        <Meta/>
        <h1>Os Nossos Produtos</h1>
        <Row>
            { data.produtos.map( (produto) => (

@@ -8,9 +8,9 @@ import Produto from '../models/produtoModel.js'
 const getProdutos = asyncHandler(async(req, res) => {
     const pageSize = 2;
     const page = Number(req.query.pageNumber) || 1;
-    const count = await Produto.countDocuments()
-
-    const produtos = await Produto.find({}).limit(pageSize).skip(pageSize * (page-1));
+    const keyword = req.query.keyword ? {nome: {$regex: req.query.keyword, $options: 'i'}} : {}
+    const count = await Produto.countDocuments({...keyword})
+    const produtos = await Produto.find({...keyword}).limit(pageSize).skip(pageSize * (page-1));
     res.json({produtos, page, pages: Math.ceil(count / pageSize)})
 })
 
@@ -126,5 +126,13 @@ const criarProdutoReview = asyncHandler(async(req, res) => {
     }
 })
 
+// @desc    Ter top rated produtos
+// @route   GET /api/produtos/top
+// @access  Public
+const getTopProdutos = asyncHandler(async(req, res) => {
+    const produtos = await Produto.find({}).sort(({rating: -1})).limit(3);
+    res.status(200).json(produtos)
+})
 
-export {getProdutos, getProduto, criarProduto, atualizarProduto, deleteProduto, criarProdutoReview}
+
+export {getProdutos, getProduto, criarProduto, atualizarProduto, deleteProduto, criarProdutoReview, getTopProdutos}
